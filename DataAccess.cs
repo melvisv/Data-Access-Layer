@@ -21,57 +21,54 @@ namespace DAL
         /// <returns></returns>
         public IDataReader ExecuteReader(string commandText, CommandType commandType, SqlParameter[] sqlParams)
         {
-            SqlConnection sqlConn;
+            using(SqlConnection sqlConn = new SqlConnection(connString))
+            {
+                sqlConn.Open();
 
-            sqlConn = new SqlConnection(connString);
-            sqlConn.Open();
-
-            SqlDataReader reader;
-            SqlCommand command;
-
-            command = new SqlCommand(commandText, sqlConn);
-            SetCommandType(commandType, command);
-            reader = command.ExecuteReader();
-
-            return reader;
+                using (SqlCommand command = new SqlCommand(commandText, sqlConn))
+                { 
+                    SetCommandType(commandType, command);
+                    SqlDataReader reader = command.ExecuteReader();
+                    return reader;
+                }
+            }
+           
         }
 
         public void ExecuteNonQuery(string commandText, CommandType commandType, SqlParameter[] sqlParams)
         {
-            SqlConnection sqlConn;
+            using (SqlConnection sqlConn = new SqlConnection(connString))
+            {
+                sqlConn.Open();
 
-            sqlConn = new SqlConnection(connString);
-            sqlConn.Open();
+                using (SqlCommand command = new SqlCommand(commandText, sqlConn))
+                {
+                    SetCommandType(commandType, command);
+                    command.Parameters.AddRange(sqlParams);
 
-            SqlCommand command;
-
-            command = new SqlCommand(commandText, sqlConn);
-            SetCommandType(commandType, command);
-            command.Parameters.AddRange(sqlParams);
-
-            command.ExecuteNonQuery();
-
-            sqlConn.Close();
+                    command.ExecuteNonQuery();
+                }
+                sqlConn.Close();
+            }
         }
 
         public object ExecuteScalar(string commandText, CommandType commandType, SqlParameter[] sqlParams)
         {
-            SqlConnection sqlConn;
+            using (SqlConnection sqlConn = new SqlConnection(connString))
+            {
+                sqlConn.Open();
 
-            sqlConn = new SqlConnection(connString);
-            sqlConn.Open();
+                using (SqlCommand command = new SqlCommand(commandText, sqlConn))
+                {
+                    SetCommandType(commandType, command);
+                    command.Parameters.AddRange(sqlParams);
 
-            SqlCommand command;
+                    var returnValue = command.ExecuteScalar();
 
-            command = new SqlCommand(commandText, sqlConn);
-            SetCommandType(commandType, command);
-            command.Parameters.AddRange(sqlParams);
-
-            var returnValue = command.ExecuteScalar();
-
-            sqlConn.Close();
-
-            return returnValue;
+                    sqlConn.Close();
+                    return returnValue;
+                }
+            }
         }
 
         private static void SetCommandType(CommandType commandType, SqlCommand command)
