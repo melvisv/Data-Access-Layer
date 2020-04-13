@@ -21,17 +21,32 @@ namespace DAL
         /// <returns></returns>
         public IDataReader ExecuteReader(string commandText, CommandType commandType, SqlParameter[] sqlParams)
         {
-            using(SqlConnection sqlConn = new SqlConnection(connString))
-            {
-                sqlConn.Open();
+            SqlConnection sqlConn = null;
+            SqlDataReader reader = null;
 
-                using (SqlCommand command = new SqlCommand(commandText, sqlConn))
-                { 
-                    SetCommandType(commandType, command);
-                    SqlDataReader reader = command.ExecuteReader();
-                    return reader;
+            try
+            {
+                sqlConn = new SqlConnection(connString);
+                {
+                    sqlConn.Open();
+
+                    SqlCommand command = new SqlCommand(commandText, sqlConn);
+                    {
+                        SetCommandType(commandType, command);
+                        reader = command.ExecuteReader();
+                        return reader;
+                    }
                 }
             }
+            catch
+            {
+                if (reader != null) 
+                    reader.Close();
+                if (sqlConn != null)
+                    sqlConn.Close();
+                throw;
+            }
+
            
         }
 
