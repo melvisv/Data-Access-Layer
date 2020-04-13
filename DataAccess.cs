@@ -33,43 +33,6 @@ namespace DAL
             return results;
         }
 
-        /// <summary>
-        /// Please close datareader and SQlConnection after reading the data
-        /// </summary>
-        /// <param name="commandText"></param>
-        /// <param name="commandType"></param>
-        /// <param name="sqlParams"></param>
-        /// <returns></returns>
-        //public IDataReader ExecuteReader(string commandText, CommandType commandType, SqlParameter[] sqlParams)
-        //{
-        //    SqlConnection sqlConn = null;
-        //    SqlDataReader reader = null;
-
-        //    try
-        //    {
-        //        sqlConn = new SqlConnection(connString);
-        //        {
-        //            sqlConn.Open();
-
-        //            SqlCommand command = new SqlCommand(commandText, sqlConn);
-        //            {
-        //                SetCommandType(commandType, command);
-        //                reader = command.ExecuteReader();
-        //                return reader;
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        if (reader != null) 
-        //            reader.Close();
-        //        if (sqlConn != null)
-        //            sqlConn.Close();
-        //        throw;
-        //    }
-
-
-        //}
 
         public void ExecuteNonQuery(string commandText, CommandType commandType, SqlParameter[] sqlParams)
         {
