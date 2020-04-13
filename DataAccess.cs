@@ -13,7 +13,7 @@ namespace DAL
         }
 
         /// <summary>
-        /// Please do reader.Close(); after reading the data
+        /// Please close datareader and SQlConnection after reading the data
         /// </summary>
         /// <param name="commandText"></param>
         /// <param name="commandType"></param>
